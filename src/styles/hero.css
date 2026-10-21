@@ -1,0 +1,45 @@
+/* ===== Hero: la estatua sobre la mesa y una placa negra chica con el nombre ===== */
+.hero { position: relative; height: 100svh; min-height: 560px; }
+.hero-pin { position: relative; height: 100%; overflow: hidden; }
+#st { position: absolute; top: 0; right: 0; width: 58%; height: 100%; display: block; touch-action: pan-y; }
+.st-fallback { position: absolute; right: 8%; top: 52%; height: 74%; width: auto; transform: translateY(-50%); mix-blend-mode: multiply; filter: grayscale(1) contrast(1.15); }
+.studio .st-fallback { filter: grayscale(1) invert(1); mix-blend-mode: screen; }
+#vit { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; overflow: visible; opacity: .5; }
+#vit * { fill: none; stroke: var(--ink); stroke-width: .8; vector-effect: non-scaling-stroke; }
+#vit circle, #vit rect, #vit line { stroke-dasharray: var(--len); stroke-dashoffset: var(--len); }
+#vit.draw circle, #vit.draw rect, #vit.draw line { animation: draw 2.6s cubic-bezier(.6, 0, .2, 1) forwards; }
+#vit text { display: none; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.hero-placa {
+  position: absolute; z-index: 3; left: max(52px, calc((100vw - 1200px) / 2)); top: 50%; transform: translateY(-50%);
+  width: min(500px, 42vw); padding: 38px 40px 34px; display: flex; flex-direction: column; gap: 14px; transition: opacity .5s;
+}
+.hero-placa h1 { font-family: var(--display); font-weight: 400; font-size: clamp(3.2rem, 6.4vw, 6rem); line-height: .9; color: var(--bone); }
+.hero-sub { font-style: italic; font-size: 19px; line-height: 1.4; color: var(--bone2); max-width: 30ch; }
+.hero-placa .zones { margin-top: 8px; gap: 8px; }
+.hero-placa .chip { padding: 6px 13px; }
+
+/* nota de "girá" y etiqueta junto al cursor: placas negras chicas */
+.note { position: absolute; left: 0; top: 0; z-index: 2; pointer-events: none; padding: 9px 16px; font-style: italic; font-size: 17px; color: var(--bone2); white-space: nowrap; transition: opacity .6s; }
+.note::before { inset: 5px; }
+#label { position: fixed; left: 0; top: 0; z-index: 30; pointer-events: none; padding: 14px 16px 12px; white-space: nowrap; opacity: 0; transition: opacity .2s; }
+#label::before { inset: 6px; }
+#label .thumbs { display: flex; gap: 4px; margin-bottom: 8px; }
+#label .thumbs img { width: 46px; height: 58px; object-fit: cover; filter: grayscale(1) contrast(1.1); border: 1px solid var(--rule); }
+#label b { display: block; font-family: var(--display); font-weight: 400; font-size: 24px; line-height: 1; }
+#label small { display: block; font-size: 14px; color: var(--bone2); margin-top: 4px; }
+
+@media (max-width: 900px) {
+  #st { width: 100%; top: 40%; height: 58%; }
+  .hero-placa { left: var(--gutter); right: var(--gutter); width: auto; top: calc(78px + env(safe-area-inset-top, 0px)); transform: none; padding: 26px 24px 22px; gap: 8px; }
+  .hero-placa h1 { font-size: clamp(2.6rem, 12vw, 3.6rem); }
+  .hero-sub { font-size: 17px; }
+  .hero-placa .zones { gap: 6px; margin-top: 4px; }
+  .hero-placa .chip { padding: 4px 10px; font-size: 16px; }
+  .note { font-size: 15px; }
+}
+@media (min-width: 761px) and (max-width: 900px) { #st { top: 26%; height: 70%; } }
+@media (prefers-reduced-motion: reduce) { #vit circle, #vit rect, #vit line { stroke-dashoffset: 0; } }
+.no-gl .hero-pin { background: var(--mesa); }
+.no-gl #noteBack { display: none; }

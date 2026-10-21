@@ -1,0 +1,7 @@
+{
+  "trailingSlash": false,
+  "rewrites": [
+    { "source": "/artista", "destination": "/index.html" },
+    { "source": "/info", "destination": "/index.html" }
+  ]
+}

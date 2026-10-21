@@ -1,0 +1,29 @@
+{
+  "name": "tinta-negra-promo",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Material para Instagram: grabaciones automáticas del sitio, reels con Remotion y carrusel en PNG.",
+  "scripts": {
+    "grabar": "node grabar.mjs",
+    "reels": "node video/render.mjs",
+    "carrusel": "node carrusel/render.mjs",
+    "studio": "remotion studio video/src/index.jsx",
+    "all": "node grabar.mjs && node video/render.mjs && node carrusel/render.mjs"
+  },
+  "devDependencies": {
+    "@remotion/bundler": "4.0.536",
+    "@remotion/cli": "4.0.536",
+    "@remotion/google-fonts": "^4.0.536",
+    "@remotion/renderer": "4.0.536",
+    "ffmpeg-static": "5.3.0",
+    "playwright": "1.64.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "remotion": "4.0.536"
+  },
+  "allowScripts": {
+    "ffmpeg-static@5.3.0": true,
+    "esbuild@0.28.1": true
+  }
+}

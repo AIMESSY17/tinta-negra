@@ -1,0 +1,345 @@
+<title>Tinta Negra Grimorio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+/* Layout: mesa de bocetos clara detrás; el contenido son láminas negras de grimorio con marcos grabados, centradas en una columna */
+:root{
+  --mesa:#e3e1dc; --panel:#121114; --panel2:#19181c; --bone:#ece6d8; --bone2:#b9b1a3; --rule:rgba(236,230,216,.32); --rule2:rgba(236,230,216,.14);
+  --ink:#141317; --stencil:#8a5ae6;
+  --display:"Pirata One","UnifrakturCook",Georgia,serif;
+  --read:"EB Garamond","Garamond","Iowan Old Style",Georgia,serif;
+  color-scheme:light;
+}
+:root.studio{ --mesa:#161518; --panel:#0b0a0c; --panel2:#121114; color-scheme:dark; }
+*{box-sizing:border-box}
+body{margin:0;background:var(--mesa);color:var(--bone);font-family:var(--read);font-size:18px;line-height:1.6;overflow-x:hidden;transition:background .6s}
+.mesa{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.mesa img{position:absolute;width:var(--w);left:var(--x);top:var(--y);transform:rotate(var(--r));filter:grayscale(1) contrast(1.1);mix-blend-mode:multiply;opacity:.9;transition:filter .6s,opacity .6s}
+:root.studio .mesa img{filter:grayscale(1) invert(1) contrast(1.05);mix-blend-mode:screen;opacity:.42}
+main{position:relative;z-index:1;display:grid;gap:110px;padding-block:130px 170px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- ornamentos ---------- */
+.sc{font-variant:small-caps;letter-spacing:.14em;text-transform:lowercase}
+.divisor{display:flex;align-items:center;gap:14px;color:var(--bone2);margin:18px auto 0;max-width:340px}
+.divisor::before,.divisor::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--rule) 30%,var(--rule))}
+.divisor::after{background:linear-gradient(270deg,transparent,var(--rule) 30%,var(--rule))}
+.divisor svg{width:46px;height:18px;flex:none}
+
+/* ---------- banda grabada (encabezado) ---------- */
+.banda{position:fixed;top:0;left:0;right:0;z-index:20;background:linear-gradient(var(--panel),var(--panel2));color:var(--bone);
+  padding-top:env(safe-area-inset-top,0px);box-shadow:0 6px 18px -8px rgba(0,0,0,.55);transition:transform .45s cubic-bezier(.6,0,.2,1)}
+.banda.oculta{transform:translateY(-110%)}
+.banda::after{content:"";position:absolute;left:0;right:0;bottom:-7px;height:6px;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule2);background:var(--panel)}
+.banda .in{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:12px max(16px,env(safe-area-inset-right,0px)) 12px max(16px,env(safe-area-inset-left,0px))}
+.marca{font-family:var(--display);font-size:30px;line-height:1;color:var(--bone);text-decoration:none}
+.caps{display:flex;gap:34px;align-items:center}
+.caps a{color:var(--bone);text-decoration:none;font-size:17px;opacity:.42;transition:opacity .45s;display:flex;gap:8px;align-items:baseline}
+.caps a .rn{font-family:var(--display);font-size:20px}
+.caps a:hover,.caps a:focus-visible{opacity:.82}
+.caps a[aria-current="page"]{opacity:1}
+.caps a:focus-visible{outline:1px dotted var(--bone);outline-offset:6px}
+.icon{width:44px;height:44px;border:1px solid var(--rule);background:none;color:var(--bone);display:grid;place-items:center;cursor:pointer;transition:border-color .3s}
+.icon:hover{border-color:var(--bone)}
+.icon svg{width:20px;height:20px}
+.menu{display:none}
+@media (max-width:760px){.caps{display:none}.menu{display:grid}.marca{font-size:26px}}
+
+/* ---------- lámina (panel de grimorio) ---------- */
+.lamina{position:relative;max-width:980px;width:100%;margin:0 auto;background:var(--panel);color:var(--bone);
+  padding:clamp(34px,6vw,64px) clamp(22px,6vw,72px);
+  box-shadow:0 2px 2px rgba(0,0,0,.2),0 26px 50px -22px rgba(0,0,0,.6)}
+.lamina::before{content:"";position:absolute;inset:12px;border:1px solid var(--rule);outline:1px solid var(--rule2);outline-offset:5px;pointer-events:none}
+.lamina::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.55;mix-blend-mode:screen;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .045 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.esq{position:absolute;width:38px;height:38px;color:var(--bone2);pointer-events:none}
+.esq.tl{top:4px;left:4px}.esq.tr{top:4px;right:4px;transform:scaleX(-1)}.esq.bl{bottom:4px;left:4px;transform:scaleY(-1)}.esq.br{bottom:4px;right:4px;transform:scale(-1)}
+.cab{text-align:center}
+.cab .eti{font-size:15px;color:var(--bone2);margin:0}
+h1,h2{font-family:var(--display);font-weight:400;line-height:.95;margin:.15em 0 0;text-wrap:balance;color:var(--bone)}
+h1{font-size:clamp(3.2rem,9vw,6.4rem)}
+h2{font-size:clamp(2.3rem,5vw,3.4rem)}
+.baj{font-style:italic;color:var(--bone2);max-width:56ch;margin:.9rem auto 0;font-size:19px}
+
+/* portada: lámina más angosta, centrada */
+.portada{max-width:760px;text-align:center;padding-block:clamp(44px,8vw,80px)}
+.portada .cap{font-family:var(--display);font-size:22px;color:var(--bone2)}
+.bajar{display:block;margin:26px auto 0;width:22px;height:40px;color:var(--bone2)}
+
+/* ---------- botones ---------- */
+.muestras{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:44px 32px;margin-top:44px;align-items:start}
+.muestra{display:grid;gap:16px;justify-items:start;min-width:0}
+.muestra small{font-size:14px;color:var(--bone2)}
+.grabado{position:relative;font-family:var(--display);font-size:25px;line-height:1;color:var(--bone);background:transparent;border:1px solid var(--bone);
+  outline:1px solid var(--rule);outline-offset:-6px;padding:17px 34px 15px;min-height:48px;cursor:pointer;display:inline-flex;white-space:nowrap;gap:14px;align-items:center;
+  transition:background .35s,color .35s,outline-color .35s;-webkit-tap-highlight-color:transparent}
+.grabado::before,.grabado::after{content:"";position:absolute;top:50%;width:7px;height:7px;background:var(--panel);border:1px solid var(--bone);transform:translateY(-50%) rotate(45deg);transition:background .35s}
+.grabado::before{left:-4.5px}.grabado::after{right:-4.5px}
+.grabado svg{width:30px;height:12px}
+.grabado svg path{fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round}
+.grabado:hover,.grabado:focus-visible{background:var(--bone);color:var(--panel);outline-color:rgba(18,17,20,.35)}
+.grabado:hover::before,.grabado:hover::after{background:var(--bone)}
+.grabado:focus-visible{box-shadow:0 0 0 3px var(--panel),0 0 0 4px var(--bone)}
+.grabado:active{transform:scale(.98)}
+.grabado.chico{font-size:20px;padding:13px 24px 11px}
+.enlace{font-family:var(--read);font-size:17px;color:var(--bone);background:none;border:0;cursor:pointer;padding:10px 0;min-height:44px;display:inline-flex;align-items:center;gap:12px;position:relative}
+.enlace .t{font-variant:small-caps;letter-spacing:.14em;text-transform:lowercase}
+.enlace .regla{width:28px;height:1px;background:var(--bone2);transition:width .4s cubic-bezier(.6,0,.2,1),background .3s}
+.enlace:hover .regla,.enlace:focus-visible .regla{width:56px;background:var(--bone)}
+.enlace:focus-visible{outline:1px dotted var(--bone);outline-offset:4px}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{font-family:var(--read);font-size:17px;color:var(--bone);background:none;border:1px solid var(--rule);padding:8px 16px;min-height:44px;cursor:pointer;opacity:.5;transition:opacity .45s,border-color .45s}
+.chip .t{font-variant:small-caps;letter-spacing:.12em;text-transform:lowercase}
+.chip:hover{opacity:.8}
+.chip[aria-pressed="true"]{opacity:1;border-color:var(--bone);outline:1px solid var(--rule2);outline-offset:3px}
+.chip:focus-visible{outline:1px dotted var(--bone);outline-offset:4px}
+.lacre{width:100px;height:100px;border:0;cursor:pointer;padding:0;background:none;transition:transform .25s}
+.lacre:hover{transform:rotate(-6deg) scale(1.04)}
+.lacre svg{width:100%;height:100%;overflow:visible}
+.lacre-fijo{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:15}
+.salpicadura{position:fixed;pointer-events:none;z-index:50;width:120px;height:120px;margin:-60px 0 0 -60px;color:var(--stencil)}
+.salpicadura path{fill:currentColor;transition:fill 1s}
+
+/* ---------- fichero ---------- */
+.fichero{display:grid;gap:30px;justify-items:center;margin-top:40px}
+.temas{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 26px}
+.tema{font-family:var(--read);font-size:18px;color:var(--bone);background:none;border:0;cursor:pointer;padding:8px 2px;min-height:44px;opacity:.42;transition:opacity .45s;position:relative}
+.tema .t{font-variant:small-caps;letter-spacing:.14em;text-transform:lowercase}
+.tema:hover{opacity:.8}
+.tema[aria-current="true"]{opacity:1}
+.tema[aria-current="true"]::after{content:"";position:absolute;left:50%;bottom:4px;width:5px;height:5px;background:var(--bone);transform:translateX(-50%) rotate(45deg)}
+.tema:focus-visible{outline:1px dotted var(--bone);outline-offset:4px}
+.taco{position:relative;width:min(560px,100%);aspect-ratio:5/3;touch-action:pan-y;outline:none}
+.taco:focus-visible{outline:1px dotted var(--bone);outline-offset:14px}
+.ficha{position:absolute;inset:0;perspective:1400px;transition:transform .5s cubic-bezier(.5,0,.2,1),opacity .4s;will-change:transform}
+.ficha .giro{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.5,0,.2,1)}
+.ficha.vuelta .giro{transform:rotateY(180deg)}
+.cara{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:var(--panel2);color:var(--bone);
+  padding:clamp(20px,5%,34px) clamp(22px,6%,42px);display:flex;flex-direction:column;
+  box-shadow:0 1px 1px rgba(0,0,0,.3),0 14px 28px -12px rgba(0,0,0,.7)}
+.cara::before{content:"";position:absolute;inset:9px;border:1px solid var(--rule);pointer-events:none}
+.cara.dorso{transform:rotateY(180deg)}
+.num{display:flex;justify-content:space-between;align-items:center;font-size:14px;color:var(--bone2)}
+.num .n{font-family:var(--display);font-size:20px;color:var(--bone)}
+.preg{font-family:var(--read);font-style:italic;font-size:clamp(25px,5.4vw,34px);line-height:1.18;margin:auto 0;text-align:center;padding-inline:6%;text-wrap:balance}
+.cara .orn{display:block;width:60px;height:14px;margin:0 auto;color:var(--bone2)}
+.toca{font-size:14px;color:var(--bone2);text-align:center;margin-top:10px}
+.dorso .pq{font-style:italic;font-size:18px;color:var(--bone2);margin:6px 0 12px;padding-bottom:10px;border-bottom:1px solid var(--rule2)}
+.dorso .resp{font-size:clamp(17px,3.6vw,19.5px);line-height:1.6;margin:0;overflow:auto}
+.marcar{border-bottom:1px solid var(--bone2);padding-bottom:1px}
+.sello-arr{position:absolute;top:24%;font-family:var(--display);font-size:clamp(26px,5.6vw,40px);color:var(--bone);border:1px solid currentColor;outline:1px solid currentColor;outline-offset:-6px;
+  padding:6px 16px 4px;opacity:0;pointer-events:none;z-index:3;background:rgba(18,17,20,.55)}
+.sello-arr.izq{right:9%;transform:rotate(12deg)}.sello-arr.der{left:9%;transform:rotate(-12deg)}
+.ficha.final .cara{align-items:center;justify-content:center;text-align:center;gap:20px}
+.ficha.final .preg{margin:0}
+.controles{display:flex;align-items:center;gap:26px;flex-wrap:wrap;justify-content:center}
+.cont{font-family:var(--display);font-size:24px;min-width:3.4em;text-align:center;font-variant-numeric:tabular-nums}
+.pista{font-size:14px;color:var(--bone2);font-style:italic;transition:opacity .5s;width:100%;text-align:center;margin:0}
+
+/* ---------- panel de ejemplo: proceso ---------- */
+.etapas{display:flex;justify-content:center;gap:10px;margin-top:30px;flex-wrap:wrap}
+.etapa{font-family:var(--display);font-size:22px;width:48px;height:48px;color:var(--bone);background:none;border:1px solid var(--rule);cursor:pointer;opacity:.45;transition:opacity .45s,border-color .45s}
+.etapa:hover{opacity:.8}
+.etapa[aria-pressed="true"]{opacity:1;border-color:var(--bone);outline:1px solid var(--rule2);outline-offset:3px}
+.etapa:focus-visible{outline:1px dotted var(--bone);outline-offset:4px}
+.etapa-tx{text-align:center;max-width:52ch;margin:22px auto 0}
+.etapa-tx b{font-family:var(--display);font-weight:400;font-size:26px;display:block;margin-bottom:4px}
+@media (max-width:560px){.taco{aspect-ratio:4/5}.controles{gap:14px 18px}}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="esquina" viewBox="0 0 38 38"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+      <path d="M2 2 H24 M2 2 V24"/><path d="M7 7 C 16 7, 18 11, 18 18 M7 7 C 7 16, 11 18, 18 18"/>
+      <path d="M18 18 C 22 18, 24 16, 24 13 M18 18 C 18 22, 16 24, 13 24"/></g>
+      <path d="M2 -1.5 L5.5 2 L2 5.5 L-1.5 2 Z" transform="translate(5 5) scale(.8)" fill="currentColor"/></symbol>
+    <symbol id="hoja" viewBox="0 0 46 18"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
+      <path d="M23 9 C 18 3, 11 3, 6 9 C 11 15, 18 15, 23 9 Z"/><path d="M23 9 C 28 3, 35 3, 40 9 C 35 15, 28 15, 23 9 Z"/><path d="M6 9 H1 M40 9 H45"/></g>
+      <path d="M23 5.5 L26.5 9 L23 12.5 L19.5 9 Z" fill="currentColor"/></symbol>
+    <radialGradient id="lg" cx="40%" cy="35%"><stop offset="0" stop-color="#8a5ae6"/><stop offset=".6" stop-color="#5b2db0"/><stop offset="1" stop-color="#3a1a78"/></radialGradient>
+    <path id="anillo" d="M50 50 m-29 0 a29 29 0 1 1 58 0 a29 29 0 1 1 -58 0"/>
+  </defs>
+</svg>
+
+<div class="mesa" aria-hidden="true" id="mesa"></div>
+
+<header class="banda" id="banda">
+  <div class="in">
+    <a class="marca" href="#">Tinta Negra</a>
+    <nav class="caps" aria-label="Capítulos">
+      <a href="#" data-c><span class="rn">I</span><span class="sc">Inicio</span></a>
+      <a href="#" data-c><span class="rn">II</span><span class="sc">El artista</span></a>
+      <a href="#" data-c aria-current="page"><span class="rn">III</span><span class="sc">Info</span></a>
+    </nav>
+    <div style="display:flex;gap:10px">
+      <button class="icon" id="lampara" aria-label="Modo estudio" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"><path d="M6 10 L12 3 L18 10 Z"/><path d="M12 10 V18 M8 21 H16 M12 18 V21"/></svg></button>
+      <button class="icon menu" aria-label="Abrir menú"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3"><path d="M4 7 H20 M4 12 H20 M4 17 H20"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="lamina portada">
+    <svg class="esq tl"><use href="#esquina"/></svg><svg class="esq tr"><use href="#esquina"/></svg><svg class="esq bl"><use href="#esquina"/></svg><svg class="esq br"><use href="#esquina"/></svg>
+    <span class="cap">Capítulo III</span>
+    <h1>Antes de tatuarte</h1>
+    <div class="divisor"><svg><use href="#hoja"/></svg></div>
+    <p class="baj">Precios, seña, el proceso y cómo cuidarlo después.</p>
+    <svg class="bajar" viewBox="0 0 22 40" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round"><path d="M11 2 V36 M4 29 L11 37 L18 29"/></svg>
+  </section>
+
+  <section class="lamina">
+    <svg class="esq tl"><use href="#esquina"/></svg><svg class="esq tr"><use href="#esquina"/></svg><svg class="esq bl"><use href="#esquina"/></svg><svg class="esq br"><use href="#esquina"/></svg>
+    <div class="cab"><p class="eti sc">Boceto · botones</p><h2>Botones grabados</h2>
+      <div class="divisor"><svg><use href="#hoja"/></svg></div>
+      <p class="baj">Pasá el mouse y tocá. La salpicadura violeta es la única tinta de color.</p></div>
+    <div class="muestras">
+      <div class="muestra"><small class="sc">Principal</small>
+        <button class="grabado" data-golpe>Armá tu tatuaje<svg viewBox="0 0 30 12"><path d="M1 6 H27 M21 1 L28 6 L21 11"/></svg></button></div>
+      <div class="muestra"><small class="sc">Principal chico</small>
+        <button class="grabado chico" data-golpe>Enviar por WhatsApp</button></div>
+      <div class="muestra"><small class="sc">Secundario</small>
+        <button class="enlace"><span class="t">Ver retrato completo</span><span class="regla"></span></button>
+        <button class="enlace"><span class="t">Abrir en Google Maps</span><span class="regla"></span></button></div>
+      <div class="muestra"><small class="sc">Estilos y zonas</small>
+        <div class="chips" id="chips">
+          <button class="chip" aria-pressed="true"><span class="t">Todos</span></button>
+          <button class="chip" aria-pressed="false"><span class="t">Blackwork</span></button>
+          <button class="chip" aria-pressed="false"><span class="t">Fine line</span></button>
+          <button class="chip" aria-pressed="false"><span class="t">Realismo</span></button>
+        </div></div>
+      <div class="muestra"><small class="sc">Reservar · lacre</small>
+        <button class="lacre" aria-label="Reservar turno" data-golpe><svg viewBox="0 0 100 100">
+          <path fill="url(#lg)" d="M50 4 C 64 3, 76 9, 86 18 C 97 28, 99 42, 97 54 C 96 67, 90 79, 79 88 C 68 97, 54 99, 41 97 C 28 95, 16 87, 9 75 C 2 63, 2 49, 6 36 C 10 23, 20 12, 32 7 C 37 5, 44 4, 50 4 Z"/>
+          <circle cx="50" cy="50" r="37" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+          <text font-family="EB Garamond, Georgia, serif" font-size="10" fill="rgba(255,255,255,.9)"><textPath href="#anillo" textLength="178" lengthAdjust="spacing">RESERVAR · TURNO · </textPath></text>
+          <path fill="rgba(255,255,255,.9)" d="M50 37 C 47 43, 43 46, 43 51 A 7 7 0 0 0 57 51 C 57 46, 53 43, 50 37 Z"/></svg></button></div>
+
+    </div>
+  </section>
+
+  <section class="lamina">
+    <svg class="esq tl"><use href="#esquina"/></svg><svg class="esq tr"><use href="#esquina"/></svg><svg class="esq bl"><use href="#esquina"/></svg><svg class="esq br"><use href="#esquina"/></svg>
+    <div class="cab"><p class="eti sc">Preguntas</p><h2>Lo que siempre me preguntan</h2>
+      <div class="divisor"><svg><use href="#hoja"/></svg></div>
+      <p class="baj">Elegí un tema, deslizá la lámina o tocala para darla vuelta.</p></div>
+    <div class="fichero">
+      <div class="temas" id="temas" aria-label="Temas"></div>
+      <div class="taco" id="taco" tabindex="0" aria-label="Preguntas. Flechas para pasar, Enter para dar vuelta"></div>
+      <div class="controles">
+        <button class="enlace" id="prev"><span class="regla" style="transform:scaleX(-1)"></span><span class="t">Anterior</span></button>
+        <span class="cont" id="cont">I / VI</span>
+        <button class="enlace" id="next"><span class="t">Siguiente</span><span class="regla"></span></button>
+        <p class="pista" id="pista">deslizá la lámina o elegí un tema</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="lamina">
+    <svg class="esq tl"><use href="#esquina"/></svg><svg class="esq tr"><use href="#esquina"/></svg><svg class="esq bl"><use href="#esquina"/></svg><svg class="esq br"><use href="#esquina"/></svg>
+    <div class="cab"><p class="eti sc">El proceso</p><h2>Un diseño, todas las etapas</h2>
+      <div class="divisor"><svg><use href="#hoja"/></svg></div></div>
+    <div class="etapas" id="etapas"></div>
+    <div class="etapa-tx" id="etapaTx"></div>
+  </section>
+</main>
+
+<button class="lacre lacre-fijo" aria-label="Reservar turno" data-golpe><svg viewBox="0 0 100 100">
+  <path fill="url(#lg)" d="M50 4 C 64 3, 76 9, 86 18 C 97 28, 99 42, 97 54 C 96 67, 90 79, 79 88 C 68 97, 54 99, 41 97 C 28 95, 16 87, 9 75 C 2 63, 2 49, 6 36 C 10 23, 20 12, 32 7 C 37 5, 44 4, 50 4 Z"/>
+  <circle cx="50" cy="50" r="37" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1"/>
+  <text font-family="EB Garamond, Georgia, serif" font-size="10" fill="rgba(255,255,255,.9)"><textPath href="#anillo" textLength="178" lengthAdjust="spacing">RESERVAR · TURNO · </textPath></text>
+  <path fill="rgba(255,255,255,.9)" d="M50 37 C 47 43, 43 46, 43 51 A 7 7 0 0 0 57 51 C 57 46, 53 43, 50 37 Z"/></svg></button>
+
+<script>
+(() => {
+const $=s=>document.querySelector(s);
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const ROM=['I','II','III','IV','V','VI','VII','VIII'];
+
+/* mesa */
+[[1,-4,6,26,-6],[4,22,-2,22,3],[9,48,4,24,-2],[12,74,-3,26,5],[15,-2,52,24,4],[19,26,44,22,-4],[21,52,58,24,2],[24,78,46,24,-5],[7,10,92,24,3],[17,64,90,26,-3]]
+ .forEach(([n,x,y,w,r])=>{const im=new Image();im.src='img2/c'+String(n).padStart(2,'0')+'.jpg';im.alt='';im.style.cssText=`--x:${x}%;--y:${y}vh;--w:${w}vw;--r:${r}deg`;$('#mesa').appendChild(im);});
+
+/* banda */
+let lastY=scrollY,tq;
+addEventListener('scroll',()=>{const b=$('#banda'),y=scrollY;b.classList.toggle('oculta',y>lastY&&y>90);lastY=y;clearTimeout(tq);tq=setTimeout(()=>b.classList.remove('oculta'),900);},{passive:true});
+document.querySelectorAll('[data-c]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();document.querySelectorAll('[data-c]').forEach(b=>b.removeAttribute('aria-current'));a.setAttribute('aria-current','page');}));
+$('#lampara').onclick=e=>{const on=document.documentElement.classList.toggle('studio');e.currentTarget.setAttribute('aria-pressed',on);};
+
+/* salpicadura */
+function salpicar(x,y){if(reduced)return;const ns='http://www.w3.org/2000/svg',s=document.createElementNS(ns,'svg');s.setAttribute('viewBox','-60 -60 120 120');s.classList.add('salpicadura');
+  s.style.left=x+'px';s.style.top=y+'px';let d='';const n=11;
+  for(let i=0;i<=n;i++){const a=i/n*Math.PI*2,r=(i%2?12:19)+Math.random()*9;d+=(i?'L':'M')+(Math.cos(a)*r).toFixed(1)+' '+(Math.sin(a)*r).toFixed(1);}d+='Z';
+  for(let k=0;k<7;k++){const a=Math.random()*Math.PI*2,r=28+Math.random()*22,rr=2+Math.random()*3.5;d+=`M${(Math.cos(a)*r+rr).toFixed(1)} ${(Math.sin(a)*r).toFixed(1)} a${rr} ${rr} 0 1 0 ${-2*rr} 0 a${rr} ${rr} 0 1 0 ${2*rr} 0`;}
+  const p=document.createElementNS(ns,'path');p.setAttribute('d',d);s.appendChild(p);document.body.appendChild(s);
+  s.animate([{transform:'scale(.2)',opacity:1},{transform:'scale(1) rotate(20deg)',opacity:.95,offset:.25},{transform:'scale(1.05) rotate(24deg)',opacity:0}],{duration:1300,easing:'cubic-bezier(.2,.8,.3,1)'});
+  setTimeout(()=>p.style.fill='#141317',300);setTimeout(()=>s.remove(),1350);}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-golpe]');if(!b)return;const r=b.getBoundingClientRect();
+  salpicar(e.clientX||r.left+r.width/2,e.clientY||r.top+r.height/2);try{navigator.vibrate&&navigator.vibrate(16);}catch(_){}});
+
+document.querySelectorAll('#chips .chip').forEach(c=>c.onclick=()=>document.querySelectorAll('#chips .chip').forEach(o=>o.setAttribute('aria-pressed',o===c)));
+
+/* fichero */
+const Q=[
+ {tema:'Precio',p:'¿Cuánto sale un tatuaje?',r:'Depende del tamaño, la zona y el detalle. Como referencia: piezas chicas <span class="marcar">desde $60.000</span>, medianas (palma de la mano) desde $110.000 y sesiones largas a $220.000 la jornada.'},
+ {tema:'Seña',p:'¿Hay que dejar seña?',r:'Sí, una <span class="marcar">seña de $20.000</span> reserva tu turno y se descuenta del total. Si avisás con 48 h, la pasamos a otra fecha.'},
+ {tema:'Edad',p:'¿Desde qué edad se puede tatuar?',r:'Desde los <span class="marcar">18 años</span> con DNI. Entre 16 y 17, solo con autorización firmada y presencia de madre, padre o tutor.'},
+ {tema:'Dolor',p:'¿Duele mucho?',r:'Depende de la zona: costillas, pies y codos son las más sensibles. Antebrazo y muslo, las más tranquilas. Vení <span class="marcar">descansado y comido</span>.'},
+ {tema:'Diseño',p:'¿Puedo llevar mi propio diseño?',r:'Claro. Traé tu idea o referencia y la <span class="marcar">adapto a tu piel</span> y a mi estilo. No copio tatuajes de otros artistas.'},
+ {tema:'Duración',p:'¿Cuánto dura una sesión?',r:'Una pieza chica, <span class="marcar">entre 1 y 2 horas</span>. Las grandes se hacen en varias sesiones de hasta 5 horas, con pausas.'},
+];
+const N=Q.length;let idx=0;const taco=$('#taco'),temas=$('#temas');
+Q.forEach((q,i)=>{const b=document.createElement('button');b.className='tema';b.innerHTML=`<span class="t">${q.tema}</span>`;b.onclick=()=>irA(i);temas.appendChild(b);});
+const orn='<svg class="orn" viewBox="0 0 46 18"><use href="#hoja"/></svg>';
+const fichas=[];
+for(let i=0;i<=N;i++){const f=document.createElement('div');f.className='ficha';
+  if(i===N){f.classList.add('final');f.innerHTML=`<div class="giro"><div class="cara">${orn}<p class="preg">¿Te quedó otra duda?</p>
+    <button class="grabado chico" data-golpe>Escribime por WhatsApp</button>
+    <button class="enlace" data-rein><span class="t">Volver al principio</span><span class="regla"></span></button></div></div>`;
+    f.querySelector('[data-rein]').onclick=e=>{e.stopPropagation();irA(0);};}
+  else{const q=Q[i];f.innerHTML=`<div class="giro">
+    <div class="cara"><div class="num"><span class="n">${ROM[i]}</span><span class="sc">${q.tema}</span></div>
+      <p class="preg">${q.p}</p>${orn}<p class="toca">tocá para leer la respuesta</p></div>
+    <div class="cara dorso"><div class="num"><span class="n">${ROM[i]}</span><span class="sc">Respuesta</span></div>
+      <p class="pq">${q.p}</p><p class="resp">${q.r}</p></div></div>
+    <span class="sello-arr izq">Vista</span><span class="sello-arr der">Anterior</span>`;}
+  taco.appendChild(f);fichas.push(f);}
+const rots=[0,-2.4,2,-1.2];
+function layout(){fichas.forEach((f,i)=>{const d=i-idx;
+  if(d<0){f.style.opacity=0;f.style.pointerEvents='none';return;}
+  f.style.pointerEvents=d===0?'auto':'none';f.style.zIndex=100-d;f.style.opacity=d<=3?1:0;
+  const k=Math.min(d,3);f.style.transform=`translate(${k*(d%2?9:-7)}px,${-k*8}px) rotate(${d===0?0:rots[k]}deg) scale(${1-k*.02})`;
+  if(d!==0)f.classList.remove('vuelta');});
+  [...temas.children].forEach((b,i)=>b.setAttribute('aria-current',i===idx));
+  $('#cont').textContent=idx<N?`${ROM[idx]} / ${ROM[N-1]}`:'fin';}
+function irA(i){idx=Math.max(0,Math.min(N,i));layout();}
+let pistaOff=false;const offPista=()=>{if(pistaOff)return;pistaOff=true;$('#pista').style.opacity=0;};
+function volar(dir){const f=fichas[idx];if(dir<0&&idx>=N)return;if(dir>0&&idx===0){f.style.transform='';return;}
+  f.style.transform=`translate(${dir<0?-140:140}%,-6%) rotate(${dir<0?-20:20}deg)`;f.style.opacity=0;setTimeout(()=>irA(idx+(dir<0?1:-1)),reduced?0:260);offPista();}
+let drag=null;
+taco.addEventListener('pointerdown',e=>{const f=fichas[idx];if(!f.contains(e.target)||e.target.closest('button'))return;
+  e.stopPropagation();drag={x:e.clientX,y:e.clientY,t:performance.now(),m:0,dx:0,f};f.style.transition='none';taco.setPointerCapture(e.pointerId);});
+taco.addEventListener('pointermove',e=>{if(!drag)return;e.stopPropagation();const dx=e.clientX-drag.x,dy=(e.clientY-drag.y)*.2;drag.m=Math.max(drag.m,Math.abs(dx));drag.dx=dx;
+  drag.f.style.transform=`translate(${dx}px,${dy}px) rotate(${dx*.045}deg)`;
+  const iz=drag.f.querySelector('.sello-arr.izq'),de=drag.f.querySelector('.sello-arr.der');
+  if(iz){iz.style.opacity=Math.min(1,Math.max(0,-dx-20)/100);de.style.opacity=idx>0?Math.min(1,Math.max(0,dx-20)/100):0;}});
+function soltar(e){if(!drag)return;e.stopPropagation();const d=drag;drag=null;d.f.style.transition='';d.f.querySelectorAll('.sello-arr').forEach(s=>s.style.opacity=0);
+  const v=d.dx/Math.max(1,performance.now()-d.t);
+  if(d.m<6){if(idx<N){d.f.classList.toggle('vuelta');offPista();}d.f.style.transform='';return;}
+  if(Math.abs(d.dx)>110||Math.abs(v)>.6)volar(d.dx<0?-1:1);else d.f.style.transform='';}
+taco.addEventListener('pointerup',soltar);taco.addEventListener('pointercancel',soltar);
+taco.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();volar(-1);}if(e.key==='ArrowLeft'){e.preventDefault();volar(1);}
+  if((e.key==='Enter'||e.key===' ')&&idx<N){e.preventDefault();fichas[idx].classList.toggle('vuelta');}});
+$('#next').onclick=()=>volar(-1);$('#prev').onclick=()=>volar(1);layout();
+
+/* proceso */
+const E=[['Idea','Me contás qué querés. Anoto palabras sueltas y hago un garabato rápido para ver si vamos por el mismo lado.'],['Boceto en lápiz','Armo el dibujo a mano, ajustando tamaño y forma a la zona.'],['Línea final','Paso el diseño a tinta limpia: cada línea que ves acá es una línea que va a ir en la piel.'],['Stencil','Calco el diseño en papel térmico y lo apoyo sobre tu piel para ubicarlo.'],['Recién tatuado','La tinta entra, la piel se enrojece un poco. Va film y cuidados desde el primer minuto.'],['Curado','Al mes la tinta se asienta, la piel vuelve a su tono y el negro queda definitivo.']];
+const et=$('#etapas');E.forEach((x,i)=>{const b=document.createElement('button');b.className='etapa';b.textContent=ROM[i];b.setAttribute('aria-label',x[0]);
+  b.onclick=()=>pinta(i);et.appendChild(b);});
+function pinta(i){[...et.children].forEach((b,k)=>b.setAttribute('aria-pressed',k===i));$('#etapaTx').innerHTML=`<b>${E[i][0]}</b>${E[i][1]}`;}
+pinta(0);
+})();
+</script>

@@ -1,0 +1,5 @@
+# Netlify: las tres páginas (/, /artista, /info) son el mismo index.html
+/artista/  /artista  301
+/info/     /info     301
+/artista   /index.html  200
+/info      /index.html  200

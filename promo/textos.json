@@ -1,0 +1,89 @@
+{
+  "usuario": "@tu.usuario",
+  "marca": "webs para tatuadores",
+  "cierre": "Escribime y la armamos con tus trabajos",
+
+  "audio": {
+    "activo": false,
+    "archivo": "audio/pista.mp3",
+    "volumen": 0.5
+  },
+
+  "reels": [
+    {
+      "id": "reel-1-pdf",
+      "titulo": "Tu web no es un PDF.",
+      "escena": "mesa-tinta",
+      "nota": "la mesa reacciona al cursor",
+      "bajada": "Webs vivas para tatuadores"
+    },
+    {
+      "id": "reel-2-zonas",
+      "titulo": "Tus clientes eligen la zona.",
+      "escena": "estatua-zonas",
+      "nota": "tocan el brazo y arman su tatuaje ahí",
+      "bajada": "Y ven tus trabajos ahí"
+    },
+    {
+      "id": "reel-3-proceso",
+      "titulo": "De la idea a la piel.",
+      "escena": "proceso",
+      "nota": "seis etapas, un mismo diseño",
+      "bajada": "Mostrá tu oficio"
+    },
+    {
+      "id": "reel-4-pedido",
+      "titulo": "Pedidos que llegan ordenados.",
+      "escena": "pedido",
+      "desde": 1.2,
+      "nota": "zona, tamaño, estilo, idea y días",
+      "bajada": "Directo a tu WhatsApp"
+    },
+    {
+      "id": "reel-5-vitruvio",
+      "titulo": "Del dibujo a la estatua.",
+      "escena": "intro-vitruvio",
+      "nota": "así se carga el sitio",
+      "bajada": "Tu estudio, en otro nivel"
+    }
+  ],
+
+  "carrusel": {
+    "portada": {
+      "titulo": "Webs para tatuadores que no parecen de nadie más",
+      "bajada": "Deslizá: cinco cosas que hace tu sitio y ninguna plantilla",
+      "captura": "intro-estatua"
+    },
+    "slides": [
+      {
+        "titulo": "Del dibujo a la estatua",
+        "frase": "La carga del sitio ya es un dibujo en tinta.",
+        "capturas": ["intro-dibujo", "intro-estatua"]
+      },
+      {
+        "titulo": "Una mesa con tinta",
+        "frase": "El fondo responde al cursor: rastro, gotas y violeta.",
+        "capturas": ["mesa-tinta"]
+      },
+      {
+        "titulo": "Zonas del cuerpo",
+        "frase": "Tocan el brazo y ven tus trabajos de brazo.",
+        "capturas": ["estatua-zonas"]
+      },
+      {
+        "titulo": "De la idea a la piel",
+        "frase": "Un mismo diseño pasa por las seis etapas.",
+        "capturas": ["proceso"]
+      },
+      {
+        "titulo": "Pedidos ordenados",
+        "frase": "Zona, tamaño, estilo e idea, directo a tu WhatsApp.",
+        "capturas": ["pedido"]
+      }
+    ],
+    "cierre": {
+      "titulo": "¿Armamos la tuya?",
+      "frase": "Escribime y la armamos con tus trabajos"
+    }
+  }
+}

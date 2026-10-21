@@ -1,0 +1,23 @@
+{
+  "name": "tinta-negra",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "images": "node scripts/optimize-images.mjs",
+    "predev": "npm run images",
+    "dev": "vite --host",
+    "prebuild": "npm run images",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "promo": "npm --prefix promo install --no-audit --no-fund && npm --prefix promo run all"
+  },
+  "dependencies": {
+    "gsap": "^3.12.5",
+    "three": "^0.170.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5",
+    "vite": "^5.4.10"
+  }
+}

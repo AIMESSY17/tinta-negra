@@ -1,0 +1,412 @@
+<title>Tinta Negra Sellos</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pirata+One&family=IM+Fell+English:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: mesa de bocetos fija detrás; una columna de "objetos" de papel con el sistema de botones y el fichero */
+:root{
+  --paper:#e3e1dc; --card:#f1eee6; --kraft:#d8ccb4; --tape:rgba(214,205,182,.82);
+  --ink:#141317; --ink-soft:#4a4752; --stencil:#6b38c7; --seal:#5b2db0; --line:rgba(20,19,23,.18);
+  --display:"Pirata One","UnifrakturCook",Georgia,serif;
+  --hand:"IM Fell English","Iowan Old Style",Georgia,serif;
+  --read:"EB Garamond","Garamond",Georgia,serif;
+  --mono:"DM Mono",ui-monospace,Menlo,Consolas,monospace;
+  color-scheme:light;
+}
+:root.studio{
+  --paper:#1b1c21; --card:#26272d; --kraft:#3a342a; --tape:rgba(90,84,70,.85);
+  --ink:#ece8e1; --ink-soft:#aaa5b3; --stencil:#b79bff; --seal:#7c4fe0; --line:rgba(236,232,225,.2);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--read);font-size:18px;line-height:1.55;margin:0;transition:background .5s,color .5s;overflow-x:hidden}
+/* ---------- mesa ---------- */
+.mesa{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.mesa img{position:absolute;width:var(--w);left:var(--x);top:var(--y);transform:rotate(var(--r));filter:grayscale(1) contrast(1.1);mix-blend-mode:multiply;opacity:.85}
+:root.studio .mesa img{filter:grayscale(1) invert(1) contrast(1.05);mix-blend-mode:screen;opacity:.5}
+.mesa::after{content:"";position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,transparent 40%,rgba(0,0,0,.12))}
+main{position:relative;z-index:1;display:grid;gap:96px;padding-block:120px 160px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+/* ---------- cinta ---------- */
+.cinta{position:fixed;top:calc(10px + env(safe-area-inset-top,0px));left:-2%;right:-2%;z-index:20;transform:rotate(-.5deg);
+  background:var(--tape);box-shadow:0 2px 6px rgba(0,0,0,.12);
+  -webkit-mask:linear-gradient(90deg,transparent,#000 1%,#000 99%,transparent);mask:linear-gradient(90deg,transparent,#000 1%,#000 99%,transparent);
+  clip-path:polygon(0 8%,3% 0,7% 6%,12% 1%,18% 7%,25% 0,33% 5%,40% 1%,48% 7%,55% 0,63% 6%,70% 2%,78% 7%,85% 0,92% 5%,100% 1%,100% 92%,95% 100%,88% 94%,80% 100%,73% 95%,65% 100%,57% 93%,50% 100%,42% 95%,35% 100%,27% 94%,19% 100%,11% 95%,4% 100%,0 93%);
+  transition:transform .45s cubic-bezier(.6,0,.2,1)}
+.cinta.oculta{transform:rotate(-.5deg) translateY(-140%)}
+.cinta .in{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:12px max(16px,calc(2% + 16px))}
+.marca{font-family:var(--display);font-size:28px;line-height:1;color:var(--ink);text-decoration:none}
+.caps{display:flex;gap:26px}
+.caps a{font-family:var(--hand);font-size:20px;color:var(--ink);text-decoration:none;position:relative;padding:4px 2px;opacity:.4;transition:opacity .45s ease}
+.caps a:hover,.caps a:focus-visible{opacity:.8}
+.caps a[aria-current="page"]{opacity:1}
+.caps a .mk{display:none}
+.caps a .mk{position:absolute;left:-4px;right:-4px;bottom:-2px;height:12px;overflow:visible}
+.caps a .mk path{fill:none;stroke:var(--stencil);stroke-width:6;stroke-linecap:round;opacity:.75;stroke-dasharray:var(--l);stroke-dashoffset:var(--l);transition:stroke-dashoffset .6s cubic-bezier(.6,0,.2,1)}
+.caps a[aria-current="page"] .mk path,.caps a:hover .mk path{stroke-dashoffset:0}
+.der{display:flex;gap:12px;align-items:center}
+.lampara{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--card);display:grid;place-items:center;cursor:pointer;color:var(--ink)}
+.lampara svg{width:22px;height:22px}
+.gota{display:none}
+@media (max-width:760px){.caps{display:none}.gota{display:grid}.marca{font-size:24px}}
+/* ---------- objetos de papel ---------- */
+.obj{position:relative;max-width:980px;margin:0 auto;width:100%;background:var(--card);padding:clamp(24px,4vw,48px);
+  box-shadow:0 1px 1px rgba(0,0,0,.08),0 6px 14px -6px rgba(0,0,0,.25),0 28px 48px -24px rgba(0,0,0,.3);transform:rotate(var(--rot,0deg))}
+.obj.kraft{background:var(--kraft)}
+.obj::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.tira{position:absolute;width:110px;height:30px;background:var(--tape);top:-14px;left:50%;margin-left:-55px;transform:rotate(-3deg);box-shadow:0 1px 2px rgba(0,0,0,.1)}
+.eti{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);margin:0 0 6px}
+h1,h2{font-family:var(--display);font-weight:400;line-height:.95;margin:0;text-wrap:balance}
+h1{font-size:clamp(3rem,9vw,6.5rem)}
+h2{font-size:clamp(2.2rem,5vw,3.4rem)}
+.baj{font-family:var(--read);font-style:italic;color:var(--ink-soft);margin:.6rem 0 0;max-width:60ch}
+.portada{text-align:center;max-width:none;background:none;box-shadow:none;padding-block:40px}
+.portada::before{display:none}
+.portada .cap{font-family:var(--hand);font-style:italic;font-size:22px;color:var(--ink);background:var(--card);display:inline-block;padding:4px 14px;transform:rotate(-1deg);box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.portada h1{margin:.25em 0 .1em;text-shadow:0 0 18px var(--paper),0 0 34px var(--paper)}
+.portada .baj{display:inline-block;background:var(--card);padding:6px 16px;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.15);transform:rotate(.6deg)}
+/* ---------- grilla de muestras ---------- */
+.muestras{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:40px 32px;margin-top:36px;align-items:start}
+.muestra{display:grid;gap:14px;justify-items:start;min-width:0}
+.muestra small{font-family:var(--mono);font-size:13px;letter-spacing:.06em;color:var(--ink-soft)}
+/* ---------- SELLO (botón principal) ---------- */
+.sello{position:relative;font-family:var(--display);font-size:26px;line-height:1;color:var(--ink);background:none;border:0;cursor:pointer;
+  padding:16px 26px 14px;min-height:44px;transform:rotate(var(--sr,-1.2deg));transition:transform .18s;display:inline-flex;gap:12px;align-items:center;
+  -webkit-tap-highlight-color:transparent}
+.sello .tinta{position:absolute;inset:0;border:3px solid currentColor;outline:1px solid currentColor;outline-offset:-8px;filter:url(#goma);pointer-events:none;transition:filter .2s}
+.sello .tx{filter:url(#goma);display:inline-flex;gap:12px;align-items:center}
+.sello svg.flecha{width:34px;height:14px;overflow:visible}
+.sello svg.flecha path{fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.sello::after{content:"";position:absolute;inset:4px;box-shadow:0 0 0 0 transparent;transition:box-shadow .2s;pointer-events:none}
+.sello:hover{transform:rotate(var(--sr,-1.2deg)) translateY(1px)}
+.sello:hover .tinta,.sello:hover .tx{filter:url(#goma-cargada)}
+.sello:active{transform:rotate(var(--sr,-1.2deg)) scale(.96)}
+.sello.golpe{animation:golpe .32s cubic-bezier(.3,1.6,.5,1)}
+@keyframes golpe{0%{transform:rotate(var(--sr,-1.2deg)) scale(1)}35%{transform:rotate(var(--sr,-1.2deg)) scale(.93)}100%{transform:rotate(var(--sr,-1.2deg)) scale(1)}}
+.sello:focus-visible{outline:2px dashed var(--ink);outline-offset:6px}
+.sello.chico{font-size:20px;padding:12px 18px 10px}
+.salpicadura{position:fixed;pointer-events:none;z-index:50;width:120px;height:120px;margin:-60px 0 0 -60px;color:var(--stencil)}
+.salpicadura path{fill:currentColor;transition:fill 1s}
+/* ---------- A MANO (botón secundario) ---------- */
+.mano{font-family:var(--hand);font-size:20px;color:var(--ink);background:none;border:0;cursor:pointer;position:relative;padding:8px 4px;min-height:44px;
+  display:inline-flex;align-items:center;gap:10px;text-decoration:none}
+.mano .sub{position:absolute;left:0;right:34px;bottom:4px;height:10px;overflow:visible;pointer-events:none}
+.mano .sub path,.mano .fl path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+.mano .sub{filter:url(#trazo)}
+.mano .sub path{stroke:var(--ink);stroke-width:1.7;opacity:.85;stroke-dasharray:240;stroke-dashoffset:240;transition:stroke-dashoffset .55s cubic-bezier(.6,0,.2,1)}
+.mano .fl{width:28px;height:14px;overflow:visible}
+.mano .fl path{stroke:currentColor;stroke-width:1.6;stroke-dasharray:44;stroke-dashoffset:44;transition:stroke-dashoffset .45s .1s}
+.mano:hover .sub path,.mano:focus-visible .sub path{stroke-dashoffset:0}
+.mano:hover .fl path,.mano:focus-visible .fl path{stroke-dashoffset:0}
+.mano .fl.siempre path{stroke-dashoffset:0}
+.mano:focus-visible{outline:2px dashed var(--ink);outline-offset:4px}
+/* ---------- CHIPS ---------- */
+.chips{display:flex;flex-wrap:wrap;gap:14px 12px}
+.chip{position:relative;font-family:var(--hand);font-size:19px;color:var(--ink);background:var(--card);border:0;padding:8px 16px;min-height:44px;cursor:pointer;
+  box-shadow:0 1px 1px rgba(0,0,0,.1),0 4px 8px -4px rgba(0,0,0,.3);transform:rotate(var(--cr,0deg))}
+.obj .chip{background:#fbf9f3}
+:root.studio .obj .chip{background:#30313a}
+.chip::before{content:"";position:absolute;width:30px;height:12px;background:var(--tape);top:-6px;left:50%;margin-left:-15px;transform:rotate(4deg)}
+.chip .circ{position:absolute;inset:-8px -10px;width:calc(100% + 20px);height:calc(100% + 16px);overflow:visible;pointer-events:none}
+.chip .circ{filter:url(#trazo)}
+.chip .circ path{fill:none;stroke:var(--ink);stroke-width:1.6;opacity:.85;stroke-linecap:round;stroke-dasharray:400;stroke-dashoffset:400;transition:stroke-dashoffset .6s cubic-bezier(.6,0,.2,1)}
+.chip[aria-pressed="true"] .circ path{stroke-dashoffset:0}
+.chip:focus-visible{outline:2px dashed var(--ink);outline-offset:6px}
+/* ---------- LACRE ---------- */
+.lacre{width:104px;height:104px;border:0;cursor:pointer;padding:0;background:none;position:relative;transition:transform .2s}
+.lacre:hover{transform:rotate(-6deg) scale(1.04)}
+.lacre svg{width:100%;height:100%;overflow:visible}
+.lacre:focus-visible{outline:2px dashed var(--ink);outline-offset:4px;border-radius:50%}
+.lacre-fijo{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:calc(18px + env(safe-area-inset-bottom,0px));z-index:15;animation:menea 7s infinite}
+@keyframes menea{0%,92%,100%{transform:rotate(0)}94%{transform:rotate(-7deg)}96%{transform:rotate(5deg)}98%{transform:rotate(-2deg)}}
+/* ---------- FICHERO ---------- */
+.fichero{display:grid;gap:26px;justify-items:center}
+.separadores{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-bottom:-6px;position:relative;z-index:2}
+.sep{font-family:var(--hand);font-size:18px;color:var(--ink);background:var(--kraft);border:0;cursor:pointer;padding:8px 16px 14px;min-height:44px;
+  border-radius:10px 10px 0 0;box-shadow:inset 0 -6px 8px -6px rgba(0,0,0,.25);position:relative;transition:transform .25s,background .25s,opacity .45s;opacity:.5}
+.sep:hover,.sep:focus-visible{opacity:.85}
+.sep:hover{transform:translateY(-3px)}
+.sep[aria-current="true"]{background:var(--card);transform:translateY(-6px);opacity:1}
+.sep:focus-visible{outline:2px dashed var(--ink);outline-offset:2px}
+.taco{position:relative;width:min(560px,100%);aspect-ratio:5/3;touch-action:pan-y;outline:none}
+.ficha{position:absolute;inset:0;perspective:1400px;transition:transform .5s cubic-bezier(.5,0,.2,1),opacity .4s;will-change:transform}
+.ficha .giro{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .7s cubic-bezier(.5,0,.2,1)}
+.ficha.vuelta .giro{transform:rotateY(180deg)}
+.cara{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#f7f4ec;color:#141317;
+  padding:clamp(18px,4%,30px) clamp(20px,5%,36px);display:flex;flex-direction:column;
+  box-shadow:0 1px 1px rgba(0,0,0,.12),0 10px 22px -10px rgba(0,0,0,.4);
+  background-image:linear-gradient(transparent 0 30%,rgba(196,68,68,.35) 30% calc(30% + 1.5px),transparent 0)}
+:root.studio .cara{background-color:#efe9dc}
+.cara.dorso{transform:rotateY(180deg);background-image:none}
+.num{font-family:var(--mono);font-size:13px;letter-spacing:.12em;color:#4a4752;display:flex;justify-content:space-between;align-items:center}
+.num b{font-weight:500;border:1.5px solid #4a4752;padding:2px 6px;transform:rotate(-2deg);display:inline-block;filter:url(#goma)}
+.preg{font-family:var(--hand);font-size:clamp(24px,5.4vw,34px);line-height:1.15;margin:auto 0;text-align:center;padding-inline:8%;text-wrap:balance}
+.cara .ilu{position:absolute;right:14px;bottom:10px;width:22%;max-width:110px;mix-blend-mode:multiply;opacity:.75;transform:rotate(6deg)}
+.toca{font-family:var(--mono);font-size:13px;color:#4a4752;letter-spacing:.06em}
+.dorso .pq{font-family:var(--hand);font-style:italic;font-size:18px;color:#4a4752;margin:4px 0 10px;border-bottom:1px solid rgba(20,19,23,.15);padding-bottom:8px}
+.dorso .resp{font-family:var(--read);font-size:clamp(17px,3.6vw,19px);line-height:1.55;margin:0;overflow:auto}
+.marcar{background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='7'%3E%3Cpath d='M0 4.5 C 8 2.6, 17 5.6, 27 3.8 S 47 2.8, 60 4.5' fill='none' stroke='%23141317' stroke-width='1.25' stroke-linecap='round' opacity='.82'/%3E%3C/svg%3E") repeat-x 0 100% / 60px 7px;padding:0 1px 4px}
+.sello-arrastre{position:absolute;top:22%;font-family:var(--display);font-size:clamp(28px,6vw,44px);color:#141317;border:3px solid currentColor;outline:1px solid currentColor;outline-offset:-7px;padding:4px 14px 2px;
+  opacity:0;pointer-events:none;filter:url(#goma);z-index:3}
+.sello-arrastre.izq{right:10%;transform:rotate(14deg)}
+.sello-arrastre.der{left:10%;transform:rotate(-14deg)}
+.ficha.final .cara{align-items:center;justify-content:center;text-align:center;gap:18px;background-image:none}
+.ficha.final .preg{margin:0}
+.ficha.final .acc{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 20px;align-items:center}
+.ficha.final .sello,.ficha.final .mano{color:#141317}
+.ficha.final .mano .sub path{stroke:#141317}
+.controles{position:relative;background:var(--card);padding:6px 18px;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.18);transform:rotate(-.6deg)}
+.controles::before,.controles::after{content:"";position:absolute;width:44px;height:16px;background:var(--tape);top:-7px}
+.controles::before{left:-10px;transform:rotate(-12deg)}.controles::after{right:-10px;transform:rotate(10deg)}
+.cont{font-family:var(--hand);font-style:italic;font-size:22px;min-width:3.5em;text-align:center;font-variant-numeric:tabular-nums}
+.pista{font-family:var(--mono);font-size:13px;color:var(--ink-soft);transition:opacity .5s}
+@media (prefers-reduced-motion:reduce){*{transition-duration:.01ms!important;animation:none!important}}
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="trazo" x="-5%" y="-40%" width="110%" height="180%">
+    <feTurbulence type="fractalNoise" baseFrequency=".09" numOctaves="2" seed="3" result="t"/>
+    <feDisplacementMap in="SourceGraphic" in2="t" scale="1.6" xChannelSelector="R" yChannelSelector="G" result="d"/>
+    <feGaussianBlur in="d" stdDeviation=".22" result="b"/>
+    <feComponentTransfer in="b"><feFuncA type="linear" slope="1.35"/></feComponentTransfer>
+  </filter>
+  <filter id="goma" x="-5%" y="-10%" width="110%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -2 1.62" result="hue"/>
+    <feComposite in="SourceGraphic" in2="hue" operator="in" result="gastado"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="9" result="w"/>
+    <feDisplacementMap in="gastado" in2="w" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+  <filter id="goma-cargada" x="-5%" y="-10%" width="110%" height="120%">
+    <feTurbulence type="fractalNoise" baseFrequency="1.1" numOctaves="2" seed="4" result="n"/>
+    <feColorMatrix in="n" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.4 1.6" result="hue"/>
+    <feComposite in="SourceGraphic" in2="hue" operator="in" result="gastado"/>
+    <feMorphology in="gastado" operator="dilate" radius=".35" result="g2"/>
+    <feTurbulence type="fractalNoise" baseFrequency=".05" numOctaves="2" seed="9" result="w"/>
+    <feDisplacementMap in="g2" in2="w" scale="2.4" xChannelSelector="R" yChannelSelector="G"/>
+  </filter>
+</svg>
+
+<div class="mesa" aria-hidden="true" id="mesa"></div>
+
+<header class="cinta" id="cinta">
+  <div class="in">
+    <a class="marca" href="#">Tinta Negra</a>
+    <nav class="caps" aria-label="Capítulos">
+      <a href="#" data-cap="1">I · Inicio<svg class="mk" viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M2 8 C 25 4, 55 10, 98 5"/></svg></a>
+      <a href="#" data-cap="2">II · El artista<svg class="mk" viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M2 8 C 25 4, 55 10, 98 5"/></svg></a>
+      <a href="#" data-cap="3" aria-current="page">III · Info<svg class="mk" viewBox="0 0 100 12" preserveAspectRatio="none"><path d="M2 8 C 25 4, 55 10, 98 5"/></svg></a>
+    </nav>
+    <div class="der">
+      <button class="lampara" id="lampara" aria-label="Modo estudio" aria-pressed="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M6 10 L12 3 L18 10 Z"/><path d="M12 10 V 18"/><path d="M8 21 H16"/><path d="M12 18 V21"/></svg>
+      </button>
+      <button class="lampara gota" aria-label="Abrir menú"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 C 9 8, 6 11, 6 14.5 A 6 6 0 0 0 18 14.5 C 18 11, 15 8, 12 3 Z"/></svg></button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="obj portada">
+    <span class="cap">Capítulo III</span>
+    <h1>Antes de tatuarte</h1>
+    <p class="baj">Precios, seña, cuidados y todo lo que me preguntan siempre.</p>
+  </section>
+
+  <section class="obj" style="--rot:-.6deg">
+    <span class="tira"></span>
+    <p class="eti">Boceto · sistema de botones</p>
+    <h2>Sellos y notas</h2>
+    <p class="baj">Pasá el mouse y tocá cada uno. El violeta aparece solo como tinta fresca.</p>
+    <div class="muestras">
+      <div class="muestra">
+        <small>PRINCIPAL · SELLO DE GOMA</small>
+        <button class="sello" data-sello>
+          <span class="tinta"></span>
+          <span class="tx">Armá tu tatuaje <svg class="flecha" viewBox="0 0 34 14"><path d="M1 8 C 10 6, 20 8, 31 7 M24 2 L32 7 L25 12"/></svg></span>
+        </button>
+      </div>
+      <div class="muestra">
+        <small>PRINCIPAL · CHICO</small>
+        <button class="sello chico" data-sello style="--sr:1deg">
+          <span class="tinta"></span>
+          <span class="tx">Enviar por WhatsApp</span>
+        </button>
+      </div>
+      <div class="muestra">
+        <small>SECUNDARIO · A MANO</small>
+        <button class="mano"><svg class="sub" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 6 C 50 3, 120 9, 198 4"/></svg>Ver retrato completo<svg class="fl" viewBox="0 0 28 14"><path d="M1 8 C 8 6, 16 8, 24 7 M18 2 L25 7 L19 12"/></svg></button>
+        <button class="mano"><svg class="sub" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 6 C 50 3, 120 9, 198 4"/></svg>Abrir en Google Maps<svg class="fl" viewBox="0 0 28 14"><path d="M1 8 C 8 6, 16 8, 24 7 M18 2 L25 7 L19 12"/></svg></button>
+      </div>
+      <div class="muestra">
+        <small>CHIPS · ESTILOS Y ZONAS</small>
+        <div class="chips" id="chips">
+          <button class="chip" aria-pressed="true" style="--cr:-2deg">Todos<svg class="circ" viewBox="0 0 120 60" preserveAspectRatio="none"><path d="M60 4 C 100 2, 117 18, 114 32 C 110 52, 70 58, 40 55 C 12 52, 3 38, 8 22 C 13 8, 40 3, 70 6"/></svg></button>
+          <button class="chip" aria-pressed="false" style="--cr:1.5deg">Blackwork<svg class="circ" viewBox="0 0 120 60" preserveAspectRatio="none"><path d="M60 4 C 100 2, 117 18, 114 32 C 110 52, 70 58, 40 55 C 12 52, 3 38, 8 22 C 13 8, 40 3, 70 6"/></svg></button>
+          <button class="chip" aria-pressed="false" style="--cr:-1deg">Fine line<svg class="circ" viewBox="0 0 120 60" preserveAspectRatio="none"><path d="M60 4 C 100 2, 117 18, 114 32 C 110 52, 70 58, 40 55 C 12 52, 3 38, 8 22 C 13 8, 40 3, 70 6"/></svg></button>
+          <button class="chip" aria-pressed="false" style="--cr:2deg">Realismo<svg class="circ" viewBox="0 0 120 60" preserveAspectRatio="none"><path d="M60 4 C 100 2, 117 18, 114 32 C 110 52, 70 58, 40 55 C 12 52, 3 38, 8 22 C 13 8, 40 3, 70 6"/></svg></button>
+        </div>
+      </div>
+      <div class="muestra">
+        <small>RESERVAR · LACRE (FLOTANTE)</small>
+        <button class="lacre" aria-label="Reservar turno" data-lacre>
+          <svg viewBox="0 0 104 104">
+            <defs><radialGradient id="lg" cx="40%" cy="35%"><stop offset="0" stop-color="#8a5ae6"/><stop offset=".6" stop-color="var(--seal)"/><stop offset="1" stop-color="#3a1a78"/></radialGradient>
+            <path id="anillo" d="M52 52 m-30 0 a30 30 0 1 1 60 0 a30 30 0 1 1 -60 0"/></defs>
+            <path fill="url(#lg)" d="M52 4 C 66 3, 78 9, 88 18 C 99 28, 101 42, 99 55 C 98 68, 92 80, 81 89 C 70 98, 56 101, 43 98 C 29 96, 17 88, 10 76 C 3 64, 2 50, 6 37 C 10 24, 20 13, 32 8 C 38 5, 45 4, 52 4 Z"/>
+            <circle cx="52" cy="52" r="38" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.2"/>
+            <text font-family="DM Mono, monospace" font-size="9.5" letter-spacing="0" fill="rgba(255,255,255,.88)"><textPath href="#anillo" textLength="182" lengthAdjust="spacing">RESERVAR · TURNO · </textPath></text>
+            <path fill="rgba(255,255,255,.9)" d="M52 38 C 49 44, 45 47, 45 52 A 7 7 0 0 0 59 52 C 59 47, 55 44, 52 38 Z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="obj kraft" style="--rot:.5deg">
+    <span class="tira"></span>
+    <p class="eti">Preguntas</p>
+    <h2>Fichero de preguntas</h2>
+    <p class="baj">Tocá un separador, deslizá la ficha o tocala para darla vuelta.</p>
+    <div class="fichero" style="margin-top:34px">
+      <div class="separadores" id="seps" role="tablist" aria-label="Temas"></div>
+      <div class="taco" id="taco" tabindex="0" aria-label="Fichero de preguntas. Flechas para pasar, Enter para dar vuelta"></div>
+      <div class="controles">
+        <button class="mano" id="prev"><svg class="fl siempre" viewBox="0 0 28 14" style="transform:scaleX(-1)"><path d="M1 8 C 8 6, 16 8, 24 7 M18 2 L25 7 L19 12"/></svg>Anterior</button>
+        <span class="cont" id="cont">1 / 6</span>
+        <button class="mano" id="next">Siguiente<svg class="fl siempre" viewBox="0 0 28 14"><path d="M1 8 C 8 6, 16 8, 24 7 M18 2 L25 7 L19 12"/></svg></button>
+        <span class="pista" id="pista">deslizá o tocá un separador</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<button class="lacre lacre-fijo" aria-label="Reservar turno" data-lacre>
+  <svg viewBox="0 0 104 104">
+    <path fill="url(#lg)" d="M52 4 C 66 3, 78 9, 88 18 C 99 28, 101 42, 99 55 C 98 68, 92 80, 81 89 C 70 98, 56 101, 43 98 C 29 96, 17 88, 10 76 C 3 64, 2 50, 6 37 C 10 24, 20 13, 32 8 C 38 5, 45 4, 52 4 Z"/>
+    <circle cx="52" cy="52" r="38" fill="none" stroke="rgba(255,255,255,.25)" stroke-width="1.2"/>
+    <text font-family="DM Mono, monospace" font-size="9.5" letter-spacing="0" fill="rgba(255,255,255,.88)"><textPath href="#anillo" textLength="182" lengthAdjust="spacing">RESERVAR · TURNO · </textPath></text>
+    <path fill="rgba(255,255,255,.9)" d="M52 38 C 49 44, 45 47, 45 52 A 7 7 0 0 0 59 52 C 59 47, 55 44, 52 38 Z"/>
+  </svg>
+</button>
+
+<script>
+(() => {
+const $=s=>document.querySelector(s);
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* mesa de bocetos */
+const mesa=$('#mesa');
+const piezas=[[1,-4,6,26,-6],[4,22,-2,22,3],[9,48,4,24,-2],[12,74,-3,26,5],[15,-2,52,24,4],[19,26,44,22,-4],[21,52,58,24,2],[24,78,46,24,-5],[7,10,92,24,3],[17,64,90,26,-3]];
+piezas.forEach(([n,x,y,w,r])=>{const im=new Image();im.src='img2/c'+String(n).padStart(2,'0')+'.jpg';im.alt='';
+  im.style.cssText=`--x:${x}%;--y:${y}vh;--w:${w}vw;--r:${r}deg`;mesa.appendChild(im);});
+
+/* cinta que se esconde al bajar */
+let lastY=scrollY,tq;
+addEventListener('scroll',()=>{const c=$('#cinta');const y=scrollY;
+  c.classList.toggle('oculta',y>lastY&&y>80);lastY=y;clearTimeout(tq);tq=setTimeout(()=>c.classList.remove('oculta'),900);},{passive:true});
+document.querySelectorAll('.caps .mk path').forEach(p=>p.style.setProperty('--l',p.getTotalLength()));
+document.querySelectorAll('.caps a').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();
+  document.querySelectorAll('.caps a').forEach(b=>b.removeAttribute('aria-current'));a.setAttribute('aria-current','page');}));
+$('#lampara').onclick=e=>{const on=document.documentElement.classList.toggle('studio');e.currentTarget.setAttribute('aria-pressed',on);};
+
+/* salpicadura violeta al estampar */
+function salpicar(x,y){if(reduced)return;
+  const ns='http://www.w3.org/2000/svg',s=document.createElementNS(ns,'svg');s.setAttribute('viewBox','-60 -60 120 120');s.classList.add('salpicadura');
+  s.style.left=x+'px';s.style.top=y+'px';
+  let d='';const n=11;for(let i=0;i<=n;i++){const a=i/n*Math.PI*2,r=(i%2?13:20)+Math.random()*10;d+=(i?'L':'M')+(Math.cos(a)*r).toFixed(1)+' '+(Math.sin(a)*r).toFixed(1);}d+='Z';
+  for(let k=0;k<7;k++){const a=Math.random()*Math.PI*2,r=30+Math.random()*22,rr=2+Math.random()*4;
+    d+=`M${(Math.cos(a)*r+rr).toFixed(1)} ${(Math.sin(a)*r).toFixed(1)} a${rr} ${rr} 0 1 0 ${-2*rr} 0 a${rr} ${rr} 0 1 0 ${2*rr} 0`;}
+  const p=document.createElementNS(ns,'path');p.setAttribute('d',d);s.appendChild(p);document.body.appendChild(s);
+  s.animate([{transform:'scale(.2) rotate(0deg)',opacity:1},{transform:'scale(1) rotate(25deg)',opacity:.95,offset:.25},{transform:'scale(1.05) rotate(28deg)',opacity:0}],{duration:1300,easing:'cubic-bezier(.2,.8,.3,1)'});
+  setTimeout(()=>p.style.fill=getComputedStyle(document.documentElement).getPropertyValue('--ink'),300);
+  setTimeout(()=>s.remove(),1350);}
+document.querySelectorAll('[data-sello],[data-lacre]').forEach(b=>b.addEventListener('click',e=>{
+  b.classList.remove('golpe');void b.offsetWidth;b.classList.add('golpe');
+  const r=b.getBoundingClientRect();salpicar(e.clientX||r.left+r.width/2,e.clientY||r.top+r.height/2);
+  try{navigator.vibrate&&navigator.vibrate(18);}catch(_){}}));
+
+/* chips */
+document.querySelectorAll('#chips .chip').forEach(c=>c.onclick=()=>{document.querySelectorAll('#chips .chip').forEach(o=>o.setAttribute('aria-pressed',o===c));});
+
+/* ---------- fichero ---------- */
+const Q=[
+ {tema:'Precio',p:'¿Cuánto sale un tatuaje?',r:'Depende del tamaño, la zona y el detalle. Como referencia: piezas chicas <span class="marcar">desde $60.000</span>, medianas (palma de la mano) desde $110.000 y sesiones largas a $220.000 la jornada.',img:2},
+ {tema:'Seña',p:'¿Hay que dejar seña?',r:'Sí, una <span class="marcar">seña de $20.000</span> reserva tu turno y se descuenta del total. Si avisás con 48 h, la pasamos a otra fecha.',img:9},
+ {tema:'Edad',p:'¿Desde qué edad se puede tatuar?',r:'Desde los <span class="marcar">18 años</span> con DNI. Entre 16 y 17, solo con autorización firmada y presencia de madre, padre o tutor.',img:14},
+ {tema:'Dolor',p:'¿Duele mucho?',r:'Depende de la zona: costillas, pies y codos son las más sensibles. Antebrazo y muslo, las más tranquilas. Vení <span class="marcar">descansado y comido</span>.',img:5},
+ {tema:'Diseño',p:'¿Puedo llevar mi propio diseño?',r:'Claro. Traé tu idea o referencia y la <span class="marcar">adapto a tu piel</span> y a mi estilo. No copio tatuajes de otros artistas.',img:12},
+ {tema:'Duración',p:'¿Cuánto dura una sesión?',r:'Una pieza chica, <span class="marcar">entre 1 y 2 horas</span>. Las grandes se hacen en varias sesiones de hasta 5 horas, con pausas.',img:19},
+];
+const N=Q.length; let idx=0, flipped=false;
+const taco=$('#taco'), seps=$('#seps');
+Q.forEach((q,i)=>{const b=document.createElement('button');b.className='sep';b.textContent=q.tema;b.setAttribute('role','tab');
+  b.onclick=()=>irA(i);seps.appendChild(b);});
+const fichas=[];
+function crearFicha(i){
+  const f=document.createElement('div');f.className='ficha';f.dataset.i=i;
+  if(i===N){f.classList.add('final');
+    f.innerHTML=`<div class="giro"><div class="cara"><p class="preg">¿Te quedó otra duda?</p>
+      <div class="acc"><button class="sello chico" data-sello><span class="tinta"></span><span class="tx">Escribime por WhatsApp</span></button>
+      <button class="mano"><svg class="sub" viewBox="0 0 200 10" preserveAspectRatio="none"><path d="M2 6 C 50 3, 120 9, 198 4"/></svg>Armá tu tatuaje<svg class="fl siempre" viewBox="0 0 28 14"><path d="M1 8 C 8 6, 16 8, 24 7 M18 2 L25 7 L19 12"/></svg></button></div>
+      <button class="mano" data-reiniciar style="font-size:17px">volver a la primera ficha</button></div></div>`;
+    f.querySelector('[data-sello]').addEventListener('click',e=>{salpicar(e.clientX,e.clientY);});
+    f.querySelector('[data-reiniciar]').addEventListener('click',e=>{e.stopPropagation();irA(0);});
+  }else{const q=Q[i];
+    f.innerHTML=`<div class="giro">
+      <div class="cara frente"><div class="num"><b>N.º ${String(i+1).padStart(2,'0')}</b><span>${q.tema.toUpperCase()}</span></div>
+        <p class="preg">${q.p}</p><span class="toca">tocá para ver la respuesta</span>
+        <img class="ilu" src="img2/c${String(q.img).padStart(2,'0')}.jpg" alt=""></div>
+      <div class="cara dorso"><div class="num"><b>N.º ${String(i+1).padStart(2,'0')}</b><span>RESPUESTA</span></div>
+        <p class="pq">${q.p}</p><p class="resp">${q.r}</p></div>
+    </div>
+    <span class="sello-arrastre izq">VISTA</span><span class="sello-arrastre der">ANTERIOR</span>`;}
+  taco.appendChild(f);return f;}
+for(let i=0;i<=N;i++)fichas.push(crearFicha(i));
+const rots=[0,-3.2,2.6,-1.6];
+function layout(){
+  fichas.forEach((f,i)=>{const d=i-idx;
+    if(d<0){f.style.opacity=0;f.style.pointerEvents='none';return;}
+    f.style.pointerEvents=d===0?'auto':'none';
+    f.style.zIndex=100-d;
+    const vis=d<=3;f.style.opacity=vis?1:0;
+    const r=d===0?0:rots[Math.min(d,3)];const dy=Math.min(d,3)*-9, dx=Math.min(d,3)*(d%2?10:-8);
+    f.style.transform=`translate(${dx}px,${dy}px) rotate(${r}deg) scale(${1-Math.min(d,3)*.02})`;
+    if(d!==0)f.classList.remove('vuelta');});
+  flipped=false;
+  [...seps.children].forEach((b,i)=>b.setAttribute('aria-current',i===idx));
+  $('#cont').textContent=idx<N?`${idx+1} / ${N}`:`fin`;
+}
+function irA(i){idx=Math.max(0,Math.min(N,i));layout();}
+function volar(dir){const f=fichas[idx];if(!f)return;
+  if(dir<0&&idx>=N)return;
+  if(dir>0&&idx===0){f.style.transform='translate(0,0)';return;}
+  f.style.transform=`translate(${dir<0?-140:140}%,-6%) rotate(${dir<0?-24:24}deg)`;f.style.opacity=0;
+  setTimeout(()=>{irA(idx+(dir<0?1:-1));},reduced?0:260);ocultarPista();}
+let pistaFuera=false;
+function ocultarPista(){if(pistaFuera)return;pistaFuera=true;$('#pista').style.opacity=0;setTimeout(()=>$('#pista').hidden=true,500);}
+
+/* arrastre tipo Tinder */
+let drag=null;
+taco.addEventListener('pointerdown',e=>{const f=fichas[idx];if(!f||!f.contains(e.target)||e.target.closest('button'))return;
+  drag={x:e.clientX,y:e.clientY,t:performance.now(),moved:0,f};f.style.transition='none';taco.setPointerCapture(e.pointerId);});
+taco.addEventListener('pointermove',e=>{if(!drag)return;const dx=e.clientX-drag.x,dy=(e.clientY-drag.y)*.25;drag.moved=Math.max(drag.moved,Math.abs(dx));drag.dx=dx;
+  drag.f.style.transform=`translate(${dx}px,${dy}px) rotate(${dx*.05}deg)`;
+  const iz=drag.f.querySelector('.sello-arrastre.izq'),de=drag.f.querySelector('.sello-arrastre.der');
+  if(iz){iz.style.opacity=Math.min(1,Math.max(0,-dx-20)/100);de.style.opacity=idx>0?Math.min(1,Math.max(0,dx-20)/100):0;}});
+function fin(e){if(!drag)return;const d=drag;drag=null;d.f.style.transition='';
+  d.f.querySelectorAll('.sello-arrastre').forEach(s=>s.style.opacity=0);
+  const v=(d.dx||0)/Math.max(1,performance.now()-d.t);
+  if(d.moved<6){if(idx<N){d.f.classList.toggle('vuelta');flipped=!flipped;ocultarPista();}layout2(d.f);return;}
+  if(Math.abs(d.dx)>110||Math.abs(v)>.6)volar(d.dx<0?-1:1);else layout2(d.f);}
+function layout2(f){f.style.transform='translate(0,0) rotate(0deg)';}
+taco.addEventListener('pointerup',fin);taco.addEventListener('pointercancel',fin);
+taco.addEventListener('keydown',e=>{if(e.key==='ArrowRight'){e.preventDefault();volar(-1);}if(e.key==='ArrowLeft'){e.preventDefault();volar(1);}
+  if(e.key==='Enter'||e.key===' '){e.preventDefault();if(idx<N)fichas[idx].classList.toggle('vuelta');}});
+$('#next').onclick=()=>volar(-1);$('#prev').onclick=()=>volar(1);
+layout();
+})();
+</script>
