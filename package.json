@@ -13,7 +13,6 @@
     "promo": "npm --prefix promo install --no-audit --no-fund && npm --prefix promo run all"
   },
   "dependencies": {
-    "gsap": "^3.12.5",
     "three": "^0.170.0"
   },
   "devDependencies": {

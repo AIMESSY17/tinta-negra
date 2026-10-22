@@ -3,101 +3,132 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Estudio de tatuaje</title>
+  <title>Tinta Negra</title>
   <meta name="description" content="">
-  <meta name="theme-color" content="#121114">
+  <meta name="theme-color" content="#e3e1dc">
+  <!-- modo noche antes del primer pintado: lo guardado o, si no hay nada, la preferencia del sistema -->
+  <script>
+    (function () {
+      var on = null;
+      try { var p = localStorage.getItem('tn-noche'); if (p) on = p === '1'; } catch (e) {}
+      if (on === null) on = matchMedia('(prefers-color-scheme: dark)').matches;
+      if (on) {
+        document.documentElement.classList.add('noche');
+        document.querySelector('meta[name="theme-color"]').content = '#1b1a1a';
+      }
+      // la pantalla de carga solo va en la primera carga de la sesión
+      var r = document.documentElement, ya = false;
+      try { ya = !!sessionStorage.getItem('tn-carga'); } catch (e) {}
+      if (ya) r.classList.add('sin-carga');
+      else {
+        // scroll bloqueado mientras está la carga (si el JS falla, se libera solo) y el David pedido lo antes posible
+        r.classList.add('cargando');
+        setTimeout(function () { r.classList.remove('cargando'); }, 6500);
+        var l = document.createElement('link'); l.rel = 'preload'; l.as = 'fetch'; l.crossOrigin = 'anonymous'; l.href = './models/david.glb';
+        document.head.appendChild(l);
+      }
+    })();
+  </script>
+  <!-- colores del sitio: la única fuente de verdad (el resto del CSS usa estas variables) -->
+  <style>
+    :root{--paper:#e3e1dc;--paper-rgb:227,225,220;--tinta:#111014;--tinta2:#3d3a42;--stencil:#6b38c7;--gris:#5b5760;--sobre-stencil:#fff;
+      --luz:#fff;--velo:rgba(0,0,0,.4);color-scheme:light}
+    :root.noche{--paper:#1b1a1a;--paper-rgb:27,26,26;--tinta:#ece7df;--tinta2:#cdc7d2;--stencil:#ab8dff;--gris:#aaa4ae;--sobre-stencil:#141217;
+      --luz:#000;color-scheme:dark}
+    html,body{background:var(--paper);color:var(--tinta)}
+    /* pantalla de carga: acá para que se vea desde el primer pintado. Si el JS no llega, se va sola a los 6 s */
+    #carga{position:fixed;inset:0;z-index:90;display:grid;place-items:center;background:var(--paper);color:var(--tinta);
+      padding:env(safe-area-inset-top,0px) 16px env(safe-area-inset-bottom,0px);animation:cargaSola .4s 6s forwards;transition:opacity .4s}
+    .sin-carga #carga{display:none}
+    html.cargando{overflow:hidden;scrollbar-gutter:stable}
+    #carga{touch-action:none}
+    .carga-col{position:relative;z-index:0}
+    .carga-estatua{position:fixed;left:0;top:0;z-index:1;transform-origin:0 0;pointer-events:none}
+    .carga-estatua canvas{display:block;width:100%;height:100%}
+    #carga.fuera{opacity:0;pointer-events:none}
+    @keyframes cargaSola{to{opacity:0;visibility:hidden;pointer-events:none}}
+    .carga-col{display:grid;justify-items:center;gap:10px;max-width:100%;text-align:center}
+    .carga-fig{--s:min(80vw,70vh);--s:min(80vw,70dvh);display:grid;width:var(--s);max-width:100%;aspect-ratio:926/617}
+    .carga-fig>*{grid-area:1/1;display:block;width:100%;height:100%;min-width:0;min-height:0}
+    .carga-fig img{object-fit:contain;opacity:0;mix-blend-mode:multiply;filter:grayscale(1) contrast(1.15)}
+    .noche .carga-fig img{filter:grayscale(1) invert(1);mix-blend-mode:screen}
+    #carga.quieta canvas{display:none}
+    #carga.quieta .carga-fig .f{opacity:.9}
+    .carga-titulo{margin:6px 0 0;font-family:"Pirata One",Georgia,serif;font-size:clamp(34px,6vw,52px);line-height:.9;font-weight:400}
+    .carga-nota,.carga-saltar{margin:0;font-family:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;font-size:12px;letter-spacing:.06em;text-transform:uppercase}
+    .carga-saltar{color:var(--gris);min-height:20px}
+    .carga-barra{width:min(220px,60vw);height:2px;margin:6px 0 4px;background:color-mix(in srgb,var(--tinta) 14%,transparent)}
+    .carga-barra i{display:block;height:100%;width:var(--p,4%);background:var(--stencil);transition:width .4s}
+    @media (prefers-reduced-motion:reduce){#carga{transition-duration:.15s}.carga-barra i{transition:none}}
+  </style>
+  <noscript><style>#carga{display:none}</style></noscript>
+  <link rel="preload" as="image" type="image/webp" href="./media/vitruvio/frente.webp">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pirata+One&display=swap">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Pirata+One&display=swap" media="print" onload="this.media='all'">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%23141317'/%3E%3Cpath d='M16 6c3 6 5 9 5 13a5 5 0 0 1-10 0c0-4 2-7 5-13z' fill='%23ece6d8'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500&family=JetBrains+Mono:wght@400;500&family=Pirata+One&display=swap">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23111014'/%3E%3Ccircle cx='16' cy='16' r='6' fill='%236b38c7'/%3E%3C/svg%3E">
 </head>
 <body>
-  <a class="skip-link" href="#main">Saltar al contenido</a>
-  <canvas id="bg" aria-hidden="true"></canvas>
-  <div id="bg-static" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
-  <div id="intro"></div>
-
-  <!-- banda grabada: nombre · capítulos · lámpara (y menú en celular) -->
-  <header id="banda" class="banda">
-    <div class="banda-in">
-      <a class="marca" href="./" data-go="inicio"></a>
-      <nav class="caps" aria-label="Capítulos"></nav>
-      <div class="banda-act">
-        <button type="button" id="tiltBtn" class="icon tilt-btn" aria-pressed="false" aria-label="Mover la mesa inclinando el teléfono" hidden>
-          <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8" y="3.5" width="8" height="17" rx="1"/><path d="M4 9 C2.6 11 2.6 13 4 15 M20 9 C21.4 11 21.4 13 20 15"/></svg>
-        </button>
-        <button type="button" class="icon" data-lamp aria-pressed="false" aria-label="Apagar la luz de la mesa (modo estudio)">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 10 L12 3 L18 10 Z"/><path d="M12 10 V18 M8 21 H16 M12 18 V21"/></svg>
-        </button>
-        <button type="button" id="menuBtn" class="icon menu-btn" aria-expanded="false" aria-controls="inkMenu" aria-label="Abrir el menú de páginas">
-          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7 H20 M4 12 H20 M4 17 H20"/></svg>
-        </button>
+  <div id="carga" aria-hidden="true">
+    <div class="carga-col">
+      <div class="carga-fig">
+        <img class="f" src="./media/vitruvio/frente.webp" alt="" decoding="async">
+        <img class="p" src="./media/vitruvio/perfil.webp" alt="" decoding="async">
+        <canvas></canvas>
       </div>
+      <p class="carga-titulo">De motu corporis</p>
+      <p class="carga-nota">estudio para tinta</p>
+      <div class="carga-barra"><i></i></div>
+      <p class="carga-saltar"></p>
+    </div>
+  </div>
+  <a class="saltar" href="#main">Saltar al contenido</a>
+  <canvas id="bg" aria-hidden="true"></canvas>
+
+  <header class="top" id="top">
+    <a class="logo" href="./" data-go="inicio"></a>
+    <nav class="nav" aria-label="Páginas">
+      <a href="./" data-go="inicio" data-nav="inicio">Inicio</a>
+      <a href="./artista" data-go="artista" data-nav="artista">Artista</a>
+      <a href="./info" data-go="info" data-nav="info">Info</a>
+    </nav>
+    <div class="top-der">
+      <button type="button" class="noche-btn" id="noche" aria-label="Modo noche" aria-pressed="false"></button>
+      <a class="reservar-top" href="#reservar" data-taller>Reservar</a>
     </div>
   </header>
-  <nav id="inkMenu" class="ink-menu" aria-label="Páginas" hidden></nav>
-  <nav id="tabbar" class="tabbar" aria-label="Capítulos"></nav>
-  <button type="button" id="reserve" class="reserve" aria-label="Reservar turno: ir a Armá tu tatuaje"></button>
-  <div class="progress" aria-hidden="true"><svg viewBox="0 0 12 1000" preserveAspectRatio="none"><path class="track" d=""/><path class="fill" d=""/></svg></div>
-  <div id="cursor" aria-hidden="true"></div>
+  <div class="etiqueta-zona" id="etq" aria-hidden="true"></div>
 
   <main id="main" tabindex="-1">
-    <!-- tres páginas: el router muestra una sola; la mesa del fondo y la estatua quedan vivas -->
-    <div class="page" data-page="inicio" hidden>
-      <section id="hero" class="hero" aria-label="Inicio"></section>
-      <section id="pedido" class="sec order"></section>
-      <section id="cierre" class="sec closing"></section>
-    </div>
-    <div class="page" data-page="artista" hidden>
-      <section class="sec chapter" data-chapter="artista"></section>
-      <section id="artista" class="sec artist"></section>
-      <section id="estilos" class="sec styles"></section>
-      <section class="sec cta-sec" data-cta="¿Te gustó algo de la carpeta?"></section>
-      <footer class="mini-foot" data-foot></footer>
-    </div>
-    <div class="page" data-page="info" hidden>
-      <section class="sec chapter" data-chapter="info"></section>
-      <section id="preguntas" class="sec faq" aria-label="Preguntas frecuentes"></section>
-      <section id="etapas" class="sec pair" aria-label="El proceso y los cuidados">
-        <div class="wrap pair-grid"><div id="proceso" class="process"></div><div id="cuidados" class="care"></div></div>
-      </section>
-      <section id="resenas" class="sec reviews" hidden></section>
-      <section class="sec cta-sec" data-cta="¿Ya tenés la idea?"></section>
-      <footer class="mini-foot" data-foot></footer>
-    </div>
+    <div class="page" data-page="inicio" hidden></div>
+    <div class="page" data-page="artista" hidden></div>
+    <div class="page" data-page="info" hidden></div>
   </main>
 
-  <svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
-    <defs>
-      <!-- boceto → stencil violeta: lo oscuro pasa a violeta, lo claro a blanco -->
-      <filter id="stencil" color-interpolation-filters="sRGB">
-        <feColorMatrix type="matrix" values=".299 .587 .114 0 0  .299 .587 .114 0 0  .299 .587 .114 0 0  0 0 0 1 0"/>
-        <feComponentTransfer><feFuncR type="gamma" exponent="1.6"/><feFuncG type="gamma" exponent="1.6"/><feFuncB type="gamma" exponent="1.6"/></feComponentTransfer>
-        <feColorMatrix type="matrix" values=".58 0 0 0 .42  0 .78 0 0 .22  0 0 .22 0 .78  0 0 0 1 0"/>
-      </filter>
-      <!-- tinta absorbida por el papel: borde irregular sin cambiar la forma de la letra -->
-      <filter id="inkbleed" x="-4%" y="-10%" width="108%" height="120%" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/>
-        <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d"/>
-        <feMorphology in="d" operator="dilate" radius=".3"/>
-      </filter>
-      <filter id="inkbleed-hover" x="-4%" y="-10%" width="108%" height="120%" color-interpolation-filters="sRGB">
-        <feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="7" result="n"/>
-        <feDisplacementMap in="SourceGraphic" in2="n" scale="2.2" xChannelSelector="R" yChannelSelector="G" result="d"/>
-        <feMorphology in="d" operator="dilate" radius=".3"/>
-      </filter>
-      <!-- ornamentos del grimorio: esquina grabada y hoja del divisor -->
-      <symbol id="esquina" viewBox="0 0 38 38"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
-        <path d="M2 2 H24 M2 2 V24"/><path d="M7 7 C 16 7, 18 11, 18 18 M7 7 C 7 16, 11 18, 18 18"/>
-        <path d="M18 18 C 22 18, 24 16, 24 13 M18 18 C 18 22, 16 24, 13 24"/></g>
-        <path d="M2 -1.5 L5.5 2 L2 5.5 L-1.5 2 Z" transform="translate(5 5) scale(.8)" fill="currentColor"/></symbol>
-      <symbol id="hoja" viewBox="0 0 46 18"><g fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round">
-        <path d="M23 9 C 18 3, 11 3, 6 9 C 11 15, 18 15, 23 9 Z"/><path d="M23 9 C 28 3, 35 3, 40 9 C 35 15, 28 15, 23 9 Z"/><path d="M6 9 H1 M40 9 H45"/></g>
-        <path d="M23 5.5 L26.5 9 L23 12.5 L19.5 9 Z" fill="currentColor"/></symbol>
-    </defs>
-  </svg>
+  <nav class="tabbar" id="tabbar" aria-label="Navegación">
+    <a href="./" data-go="inicio" data-nav="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M4 11 L12 4 L20 11 V20 H4 Z"/></svg>Inicio</a>
+    <a href="./artista" data-go="artista" data-nav="artista"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21 C 5 15, 19 15, 20 21"/></svg>Artista</a>
+    <a href="./info" data-go="info" data-nav="info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11 V17 M12 7.5 V8.5"/></svg>Info</a>
+    <button type="button" class="res" data-taller><span class="punto" aria-hidden="true"></span>Reservar</button>
+  </nav>
+
+  <div class="velo" id="velo"></div>
+  <aside class="hoja" id="hoja" role="dialog" aria-modal="true" aria-labelledby="hojaT" aria-hidden="true" inert>
+    <div class="hoja-tirador">
+      <div class="manija" aria-hidden="true"></div>
+      <div class="hoja-cab"><div><span class="n" id="hojaN"></span><h3 id="hojaT"></h3></div><button type="button" class="cerrar" id="cerrarHoja" aria-label="Cerrar">×</button></div>
+    </div>
+    <div class="carrusel" id="carrusel"></div>
+    <div class="hoja-pie"><button type="button" class="btn solido" id="quiero"></button></div>
+  </aside>
+
+  <section class="taller" id="taller" role="dialog" aria-modal="true" aria-label="Armá tu tatuaje" aria-hidden="true" inert>
+    <div class="t-cab"><span class="n" id="tPaso">Paso 1 de 5</span><button type="button" class="cerrar" id="tCerrar" aria-label="Cerrar">×</button></div>
+    <div class="barras" id="barras" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="t-cuerpo" id="tCuerpo"></div>
+    <div class="t-pie"><button type="button" class="link" id="tAtras">Atrás</button><button type="button" class="btn solido" id="tSig">Siguiente</button></div>
+  </section>
+
   <script type="module" src="/src/main.js"></script>
 </body>
 </html>
